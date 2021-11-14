@@ -1,4 +1,5 @@
-printWidth: 100
+printWidth: 80
+prose-wrap: always
 useTabs: false
 semi: true
 singleQuote: true
