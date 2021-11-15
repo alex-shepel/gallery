@@ -2,7 +2,7 @@ import './sass/main.scss';
 import ImgService from './js/img-service';
 import cardTpl from './templates/card.hbs';
 import { Notify } from 'notiflix';
-import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/src/simple-lightbox.scss';
 
@@ -72,4 +72,4 @@ const onScroll = e => {
 };
 
 refs.searchForm.addEventListener('submit', onSearch);
-refs.gallery.addEventListener('scroll', throttle(onScroll, 300));
+refs.gallery.addEventListener('scroll', debounce(onScroll, 0));
