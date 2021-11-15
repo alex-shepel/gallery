@@ -21,6 +21,13 @@ const totalHitsMessage = num => `Hooray! We found ${num} images.`;
 const getInputValue = form =>
   [...form.elements].find(elem => elem.tagName === 'INPUT').value;
 
+const scrollTo = position => {
+  refs.gallery.scroll({
+    top: position,
+    behavior: 'smooth',
+  });
+};
+
 const renderQueryWithErrorCheck = async query => {
   try {
     const data = await imgService.aFetchImages(query);
@@ -35,8 +42,10 @@ const renderQueryWithErrorCheck = async query => {
 
 const loadMore = async () => {
   try {
+    const scrollHeight = refs.gallery.scrollHeight;
     const data = await imgService.nextPage();
     refs.gallery.insertAdjacentHTML('beforeend', cardTpl(data));
+    scrollTo(scrollHeight);
     lightbox.refresh();
   } catch (e) {
     Notify.failure(e.message);
@@ -45,11 +54,7 @@ const loadMore = async () => {
 
 const onSearch = async e => {
   e.preventDefault();
-  const pixelsToScroll = -1 * refs.gallery.scrollTop;
-  refs.gallery.scroll({
-    top: pixelsToScroll,
-    behavior: 'smooth',
-  });
+  scrollTo(0);
   const form = e.target;
   const query = getInputValue(form);
   await renderQueryWithErrorCheck(query);
@@ -61,7 +66,9 @@ const onScroll = e => {
   const isScreenBottom =
     scrollTop + clientHeight >= scrollHeight - TOLERANCE_PX;
 
-  if (isScreenBottom) loadMore();
+  if (isScreenBottom) {
+    loadMore();
+  }
 };
 
 refs.searchForm.addEventListener('submit', onSearch);
