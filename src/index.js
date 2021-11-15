@@ -45,6 +45,11 @@ const loadMore = async () => {
 
 const onSearch = async e => {
   e.preventDefault();
+  const pixelsToScroll = -1 * refs.gallery.scrollTop;
+  refs.gallery.scroll({
+    top: pixelsToScroll,
+    behavior: 'smooth',
+  });
   const form = e.target;
   const query = getInputValue(form);
   await renderQueryWithErrorCheck(query);
@@ -52,7 +57,7 @@ const onSearch = async e => {
 
 const onScroll = e => {
   const { scrollTop, clientHeight, scrollHeight } = e.target;
-  const TOLERANCE_PX = 2;
+  const TOLERANCE_PX = 1;
   const isScreenBottom =
     scrollTop + clientHeight >= scrollHeight - TOLERANCE_PX;
 
