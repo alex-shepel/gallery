@@ -1,5 +1,6 @@
 import { Notify } from 'notiflix';
 import axios from 'axios';
+import https from 'https';
 
 const BASE_URL = 'https://pixabay.com';
 const RESOURCE = 'api';
@@ -39,6 +40,7 @@ export default class ImgService {
     headers: {
       Accept: 'application/json',
     },
+    httpsAgent: new https.Agent({ rejectUnauthorized: false }),
   });
 
   async aFetchImages(query, pageNum = 1) {
