@@ -13,13 +13,6 @@ const PARAMS = {
   per_page: '40',
 };
 
-const OPTIONS = {
-  method: 'GET',
-  headers: {
-    Accept: 'application/json',
-  },
-};
-
 const FILTERS = [
   'webformatURL',
   'largeImageURL',
@@ -38,31 +31,38 @@ const GET_INFO_BEFORE_FETCH_ERROR = `You must make query before trying to get it
 
 export default class ImgService {
   #page = 1;
-  #params = ImgService.#getUrlParamsStr();
   #totalHits = null;
   #query = null;
+
+  #axiosInstance = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      Accept: 'application/json',
+    },
+  });
 
   async aFetchImages(query, pageNum = 1) {
     this.#page = pageNum;
 
-    const url = `${BASE_URL}/${RESOURCE}/?q=${query}&${
-      this.#params
-    }&page=${pageNum}`;
-    const response = await fetch(url, OPTIONS);
+    const params = {
+      q: query,
+      page: pageNum,
+      ...PARAMS,
+    };
 
-    const responseJson = await ImgService.#aParseResponseData(response);
-    const filteredJson = ImgService.#filterResponseJson(responseJson);
+    const { data } = await this.#axiosInstance(RESOURCE, { params });
+    const filteredData = ImgService.#filterResponseData(data);
 
-    ImgService.#checkNoMatches(filteredJson);
-    this.#totalHits = responseJson.totalHits;
+    ImgService.#checkNoMatches(data.totalHits);
+    this.#totalHits = data.totalHits;
     this.#query = query;
 
-    return this.#promisifyJson(filteredJson);
+    return ImgService.#promisify(filteredData);
   }
 
   async nextPage() {
-    Notify.info('Loading more images...');
     this.#checkCollectionEnd(this.#page);
+    Notify.info('Loading more images...');
     return await this.aFetchImages(this.#query, this.#page + 1);
   }
 
@@ -73,23 +73,17 @@ export default class ImgService {
     }
   }
 
-  static #checkNoMatches(json) {
-    if (json.length === 0) {
+  static #checkNoMatches(totalHits) {
+    if (totalHits === 0) {
       throw new Error(NO_MATCHES_MESSAGE);
     }
   }
 
-  #promisifyJson(json) {
-    return new Promise(resolve => resolve(json));
+  static #promisify(data) {
+    return new Promise(resolve => resolve(data));
   }
 
-  static async #aParseResponseData(response) {
-    if (response.ok) return response.json();
-
-    throw new Error(response.statusText);
-  }
-
-  static #filterResponseJson(data) {
+  static #filterResponseData(data) {
     return data.hits.map(this.#filterResponseHit);
   }
 
@@ -98,12 +92,6 @@ export default class ImgService {
       filteredObj[filter] = hit[filter];
       return filteredObj;
     }, {});
-  }
-
-  static #getUrlParamsStr() {
-    return Object.keys(PARAMS)
-      .map(key => `${key}=${PARAMS[key]}`)
-      .join('&');
   }
 
   get totalHits() {
