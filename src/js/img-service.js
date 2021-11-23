@@ -45,9 +45,7 @@ export default class ImgService {
       ...ImgService.#PARAMS,
     };
 
-    const response = await axios.get('https://pixabay.com/api', {
-      params,
-    });
+    const response = await axios.get('https://pixabay.com/api?key=24268385-a09efe65560efa0dec086fa93&q=cat');
     console.dir(response);
 
     const data = response.data;
