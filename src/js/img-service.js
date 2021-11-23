@@ -1,11 +1,11 @@
 import { Notify } from 'notiflix';
 import axios from 'axios';
 
-axios.default.baseURL = 'https://pixabay.com';
+// axios.default.baseURL = 'https://pixabay.com';
 
 export default class ImgService {
   static #BASE_URL = 'https://pixabay.com';
-  static #RESOURCE = 'api';
+  static #RESOURCE = '/api';
 
   static #PARAMS = {
     key: '24268385-a09efe65560efa0dec086fa93',
@@ -45,9 +45,14 @@ export default class ImgService {
       ...ImgService.#PARAMS,
     };
 
-    const { data } = await axios.get(ImgService.#RESOURCE, {
+    const response = await axios.get('https://pixabay.com/api', {
       params,
     });
+    console.dir(response);
+
+    const data = response.data;
+    console.log(data);
+
     const filteredData = ImgService.#filterResponseData(data);
 
     ImgService.#checkNoMatches(data.totalHits);
