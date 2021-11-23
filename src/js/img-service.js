@@ -47,7 +47,7 @@ export default class ImgService {
       ...ImgService.#PARAMS,
     };
 
-    const { data } = await this.#axiosInstance(ImgService.#RESOURCE, {
+    const { data } = await this.#axiosInstance.get(ImgService.#RESOURCE, {
       params,
     });
     const filteredData = ImgService.#filterResponseData(data);
