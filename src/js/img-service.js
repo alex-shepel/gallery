@@ -36,6 +36,9 @@ export default class ImgService {
 
   #axiosInstance = axios.create({
     baseURL: ImgService.#BASE_URL,
+    headers: {
+      Accept: 'application/json',
+    },
   });
 
   async aFetchImages(query, pageNum = 1) {
