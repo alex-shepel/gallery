@@ -1,6 +1,8 @@
 import { Notify } from 'notiflix';
 import axios from 'axios';
 
+axios.default.baseURL = 'https://pixabay.com';
+
 export default class ImgService {
   static #BASE_URL = 'https://pixabay.com';
   static #RESOURCE = 'api';
@@ -34,10 +36,6 @@ export default class ImgService {
   #totalHits = null;
   #query = null;
 
-  #axiosInstance = axios.create({
-    baseURL: ImgService.#BASE_URL,
-  });
-
   async aFetchImages(query, pageNum = 1) {
     this.#page = pageNum;
 
@@ -47,7 +45,7 @@ export default class ImgService {
       ...ImgService.#PARAMS,
     };
 
-    const { data } = await this.#axiosInstance.get(ImgService.#RESOURCE, {
+    const { data } = await axios.get(ImgService.#RESOURCE, {
       params,
     });
     const filteredData = ImgService.#filterResponseData(data);
