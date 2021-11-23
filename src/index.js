@@ -54,13 +54,19 @@ const loadMore = async () => {
 
 const onSearch = async e => {
   e.preventDefault();
-  scrollTo(0);
+  refs.gallery.innerHTML = '';
   const form = e.target;
   const query = getInputValue(form);
   await renderQueryWithErrorCheck(query);
 };
 
 const onScroll = e => {
+  const isScreenEmpty = refs.gallery.innerHTML === '';
+
+  if (isScreenEmpty) {
+    return;
+  }
+
   const { scrollTop, clientHeight, scrollHeight } = e.target;
   const TOLERANCE_PX = 1;
   const isScreenBottom =
