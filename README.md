@@ -1,2 +1,7 @@
-# goit-js-hw-11
-The goit school JS homework #11.
+# Gallery
+
+The images search site. The goal is to demonstrate the skill of making queries to the backend, handling responses and errors.
+
+## Technologies
+
+js es6+, ajax, axios, rest api, html partials, handlebars, babel, sass, adaptive css, bem, git
