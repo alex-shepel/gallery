@@ -48,6 +48,12 @@ const App = () => {
       .catch(handleFetchError);
   }, [handleFetchError]);
 
+  // useEffect(() => {
+  // if (page !== 1) {
+  // window.scrollTo({ top: document.body.clientHeight, behavior: 'smooth' });
+  // }
+  // }, [images]);
+
   const handleSubmit = query => {
     const promiseCallback = () => pixabay.fetch(query);
     const thenCallback = images => setImages(images);
@@ -67,7 +73,13 @@ const App = () => {
     promiseCallback()
       .then(thenCallback)
       .then(() => setView(View.NORMAL))
-      .catch(handleFetchError);
+      .catch(handleFetchError)
+      .finally(() =>
+        window.scrollTo({
+          top: document.body.clientHeight,
+          behavior: 'smooth',
+        }),
+      );
   };
 
   const handleModalClose = () => {
