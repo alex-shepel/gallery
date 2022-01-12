@@ -4,4 +4,4 @@ The images search site. The goal is to demonstrate the skill of making queries t
 
 ## Technologies
 
-js es6+, ajax, axios, rest api, html partials, handlebars, babel, sass, adaptive css, bem, git
+react hooks, flux, js es6+, ajax, axios, rest api, html partials, handlebars, babel, sass, adaptive css, bem, git
