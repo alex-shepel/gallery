@@ -2,7 +2,7 @@
 
 The images search site. The goal is to demonstrate the skill of making queries to the backend, handling responses and errors.
 
-Live: alex-shepel.github.io/gallery/
+Live: https://alex-shepel.github.io/gallery/
 
 ## Technologies
 
